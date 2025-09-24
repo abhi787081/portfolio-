@@ -79,7 +79,7 @@
       position:relative;
       overflow:hidden;
       backdrop-filter: blur(6px) saturate(120%);
-      order: 1; /* Show first on mobile */
+      order: 1; /* Show second on mobile */
     }
 
     @media (min-width: 768px) {
@@ -187,7 +187,7 @@
       display:flex;
       flex-direction:column;
       gap:18px;
-      order: 2; /* Show second on mobile */
+      order: 2; /* Show first on mobile */
     }
 
     @media (min-width: 768px) {
@@ -430,17 +430,69 @@
       display: none;
       position: fixed;
       top: 20px;
+      left: 30px;
       right: 20px;
       z-index: 1000;
       background: var(--accent);
       color: #051020;
       border: none;
-      border-radius: 50%;
+      border-radius: 10%;
       width: 50px;
       height: 50px;
       font-size: 20px;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(6,182,212,0.3);
+    }
+    
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100%;
+      background: var(--bg1);
+      z-index: 999;
+      transition: right 0.3s ease;
+      padding: 80px 20px 20px;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+    }
+    
+    .mobile-menu.active {
+      right: 0;
+    }
+    
+    .mobile-menu ul {
+      list-style: none;
+    }
+    
+    .mobile-menu li {
+      margin-bottom: 15px;
+    }
+    
+    .mobile-menu a {
+      color: #e6eef6;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    
+    .mobile-menu a:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    
+    .close-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #e6eef6;
+      font-size: 24px;
+      cursor: pointer;
     }
     
     @media (max-width: 767px) {
@@ -454,6 +506,114 @@
         margin-top: 60px;
       }
     }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(2,17,36,0.9);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      border-radius: 18px;
+      padding: 20px;
+      max-width: 90%;
+      max-height: 90%;
+      overflow: auto;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: #e6eef6;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .modal-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    /* Form styles */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: #e6eef6;
+      font-family: inherit;
+    }
+    
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    /* Resume page styles */
+    .resume-section {
+      margin-bottom: 30px;
+    }
+    
+    .resume-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    .certifications-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .certification-item {
+      text-align: center;
+    }
+    
+    .certification-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    .back-button {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -462,7 +622,18 @@
 
 <button class="mobile-menu-btn" id="menuBtn">☰</button>
 
-<div class="page">
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-menu" id="closeMenu">×</button>
+  <ul>
+    <li><a href="#" onclick="showPage('home')">Home</a></li>
+    <li><a href="#" onclick="showPage('projects')">Projects</a></li>
+    <li><a href="#" onclick="showPage('resume')">Resume</a></li>
+    <li><a href="#" onclick="showContactForm()">Contact</a></li>
+  </ul>
+</div>
+
+<!-- Home Page -->
+<div class="page" id="homePage">
   <div class="wrap">
 
     <!-- LEFT: Profile card -->
@@ -499,7 +670,7 @@
       </div>
 
       <div style="margin-top:18px;text-align:center">
-        <button class="btn primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire / Contact</button>
+        <button class="btn primary" onclick="showContactForm()">Hire / Contact</button>
       </div>
     </div>
 
@@ -517,8 +688,8 @@
           </div>
 
           <div class="cta-buttons">
-            <button class="btn" onclick="downloadResume()">Download Resume</button>
-            <button class="btn primary" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">See Projects</button>
+            <button class="btn" onclick="showPage('resume')">Download Resume</button>
+            <button class="btn primary" onclick="showPage('projects')">See Projects</button>
           </div>
         </div>
 
@@ -545,7 +716,7 @@
         <div id="projects" class="projects" style="margin-top:18px">
           <div class="project reveal">
             <img src="https://via.placeholder.com/800x450/06b6d4/ffffff?text=Project+1" alt="proj1">
-            <h4>Historical Stories Video Editor</h4>
+            <h4>My first website is film downloder site</h4>
             <p style="margin:6px 0 10px;color:rgba(230,238,246,0.75);font-size:13px">AI-assisted video thumbnails & editing pipeline.</p>
             <div style="display:flex;gap:8px">
               <button class="btn" onclick="alert('Demo not linked yet')">Preview</button>
@@ -580,12 +751,151 @@
 
         <div class="socials">
           <div class="icon" onclick="openLink('mailto:abhi787081@gmail.com')" title="Email">✉️</div>
-          <div class="icon" onclick="openLink('https://github.com/amitkumar')" title="GitHub">GH</div>
+          <div class="icon" onclick="openLink('https://github.com/amitkumar')" title="GitHub">FB</div>
           <div class="icon" onclick="openLink('https://linkedin.com/in/amitkumar')" title="LinkedIn">in</div>
+          <div class="icon" onclick="openLink('https:///meta/n.com/in/amitkumar')" title="instagram">insta</div>
         </div>
       </div>
 
     </div>
+  </div>
+</div>
+
+<!-- Projects Page -->
+<div class="page" id="projectsPage" style="display: none;">
+  <div class="wrap" style="max-width: 900px;">
+    <div class="card" style="width: 100%;">
+      <h1>My Projects</h1>
+      <div class="projects" style="margin-top: 20px; flex-direction: column;">
+        <div class="project">
+          <img src="https://via.placeholder.com/800x450/06b6d4/ffffff?text=Project+1" alt="proj1">
+          <h4>My first website is film downloder site</h4>
+          <p style="margin:6px 0 10px;color:rgba(230,238,246,0.75);font-size:13px">AI-assisted video thumbnails & editing pipeline.</p>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="alert('Demo not linked yet')">Preview</button>
+          </div>
+        </div>
+
+        <div class="project">
+          <img src="https://via.placeholder.com/800x450/06b6d4/ffffff?text=Project+2" alt="proj2">
+          <h4>Portfolio Template</h4>
+          <p style="margin:6px 0 10px;color:rgba(230,238,246,0.75);font-size:13px">This responsive animated template built with vanilla HTML/CSS/JS.</p>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="alert('Demo not linked yet')">Preview</button>
+          </div>
+        </div>
+
+        <div class="project">
+          <img src="https://via.placeholder.com/800x450/06b6d4/ffffff?text=Project+3" alt="proj3">
+          <h4>Animated Website UI</h4>
+          <p style="margin:6px 0 10px;color:rgba(230,238,246,0.75);font-size:13px">High-quality UI/UX with micro-interactions.</p>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="alert('Demo not linked yet')">Preview</button>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button class="btn primary back-button" onclick="showPage('home')">Back to Home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Resume Page -->
+<div class="page" id="resumePage" style="display: none;">
+  <div class="wrap" style="max-width: 900px;">
+    <div class="card" style="width: 100%;">
+      <h1>My Resume & Certifications</h1>
+      
+      <div class="resume-section">
+        <h2>Personal Information</h2>
+        <p><strong>Name:</strong> Amit Kumar</p>
+        <p><strong>Email:</strong> abhi787081@gmail.com</p>
+        <p><strong>Education:</strong> Diploma in Computer Application, Currently pursuing BCA (Distance) from Chandigarh University</p>
+      </div>
+      
+      <div class="resume-section">
+        <h2>Skills</h2>
+        <ul>
+          <li>HTML5, CSS3, JavaScript</li>
+          <li>Responsive Web Design</li>
+          <li>UI/UX Design Principles</li>
+          <li>Problem Solving</li>
+        </ul>
+      </div>
+      
+      <div class="resume-buttons">
+        <button class="btn primary" onclick="showImageModal('First Semester Result', 'https://via.placeholder.com/600x800/06b6d4/ffffff?text=First+Semester+Result')">My First Semester Result</button>
+        <button class="btn primary" onclick="showImageModal('Resume', 'https://via.placeholder.com/600x800/06b6d4/ffffff?text=Resume')">My Resume</button>
+        <button class="btn primary" onclick="showCertifications()">My (OL) Certifications</button>
+      </div>
+      
+      <div id="certificationsSection" style="display: none;">
+        <h2>Online Certifications</h2>
+        <div class="certifications-grid">
+          <div class="certification-item">
+            <img src="https://via.placeholder.com/300x200/06b6d4/ffffff?text=Cert+1" alt="Certification 1" onclick="showImageModal('Certification 1', 'https://via.placeholder.com/600x800/06b6d4/ffffff?text=Certification+1')">
+            <p>HTML Fundamentals</p>
+          </div>
+          <div class="certification-item">
+            <img src="https://via.placeholder.com/300x200/06b6d4/ffffff?text=Cert+2" alt="Certification 2" onclick="showImageModal('Certification 2', 'https://via.placeholder.com/600x800/06b6d4/ffffff?text=Certification+2')">
+            <p>CSS Mastery</p>
+          </div>
+          <div class="certification-item">
+            <img src="https://via.placeholder.com/300x200/06b6d4/ffffff?text=Cert+3" alt="Certification 3" onclick="showImageModal('Certification 3', 'https://via.placeholder.com/600x800/06b6d4/ffffff?text=Certification+3')">
+            <p>JavaScript Basics</p>
+          </div>
+          <div class="certification-item">
+            <img src="https://via.placeholder.com/300x200/06b6d4/ffffff?text=Cert+4" alt="Certification 4" onclick="showImageModal('Certification 4', 'https://via.placeholder.com/600x800/06b6d4/ffffff?text=Certification+4')">
+            <p>Responsive Design</p>
+          </div>
+          <div class="certification-item">
+            <img src="https://via.placeholder.com/300x200/06b6d4/ffffff?text=Cert+5" alt="Certification 5" onclick="showImageModal('Certification 5', 'https://via.placeholder.com/600x800/06b6d4/ffffff?text=Certification+5')">
+            <p>Web Development</p>
+          </div>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 20px;">
+        <button class="btn primary back-button" onclick="showPage('home')">Back to Home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Form Modal -->
+<div class="modal" id="contactModal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeContactForm()">×</button>
+    <h2>Contact Me</h2>
+    <form id="contactForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Mobile Number</label>
+        <input type="tel" id="phone" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" required></textarea>
+      </div>
+      <button type="submit" class="btn primary">Send Message</button>
+    </form>
+  </div>
+</div>
+
+<!-- Image Modal -->
+<div class="modal" id="imageModal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeImageModal()">×</button>
+    <h2 id="modalTitle">Image</h2>
+    <img id="modalImage" class="modal-image" src="" alt="">
   </div>
 </div>
 
@@ -691,17 +1001,89 @@
   })();
 
   /* ----------------------------
+     Page Navigation
+     ---------------------------- */
+  function showPage(page) {
+    // Hide all pages
+    document.getElementById('homePage').style.display = 'none';
+    document.getElementById('projectsPage').style.display = 'none';
+    document.getElementById('resumePage').style.display = 'none';
+    
+    // Show selected page
+    document.getElementById(page + 'Page').style.display = 'flex';
+    
+    // Close mobile menu if open
+    document.getElementById('mobileMenu').classList.remove('active');
+  }
+
+  /* ----------------------------
+     Mobile Menu
+     ---------------------------- */
+  document.getElementById('menuBtn').addEventListener('click', function() {
+    document.getElementById('mobileMenu').classList.add('active');
+  });
+
+  document.getElementById('closeMenu').addEventListener('click', function() {
+    document.getElementById('mobileMenu').classList.remove('active');
+  });
+
+  /* ----------------------------
+     Contact Form
+     ---------------------------- */
+  function showContactForm() {
+    document.getElementById('contactModal').classList.add('active');
+    document.getElementById('mobileMenu').classList.remove('active');
+  }
+
+  function closeContactForm() {
+    document.getElementById('contactModal').classList.remove('active');
+  }
+
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = {
+      name: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      message: document.getElementById('message').value,
+      timestamp: new Date().toISOString()
+    };
+    
+    // In a real application, you would send this data to a server
+    // For this demo, we'll just save it to localStorage
+    let submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+    submissions.push(formData);
+    localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+    
+    alert('Thank you for your message! I will get back to you soon.');
+    closeContactForm();
+    document.getElementById('contactForm').reset();
+  });
+
+  /* ----------------------------
+     Image Modal for Certifications
+     ---------------------------- */
+  function showImageModal(title, imageUrl) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalImage').src = imageUrl;
+    document.getElementById('imageModal').classList.add('active');
+  }
+
+  function closeImageModal() {
+    document.getElementById('imageModal').classList.remove('active');
+  }
+
+  function showCertifications() {
+    const certSection = document.getElementById('certificationsSection');
+    certSection.style.display = certSection.style.display === 'none' ? 'block' : 'none';
+  }
+
+  /* ----------------------------
      Tiny helpers
      ---------------------------- */
   function openLink(u){ window.open(u,'_blank') }
-  function downloadResume(){
-    alert('Resume not attached. Replace downloadResume() to link your file.');
-  }
-
-  /* Mobile menu functionality */
-  document.getElementById('menuBtn').addEventListener('click', function() {
-    alert('Mobile menu would open here. Add navigation links as needed.');
-  });
 
   /* Small keyboard easter: press "g" to toggle a visual glow (for fun) */
   (function(){
